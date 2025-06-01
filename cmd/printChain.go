@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/Alonza0314/DFcoin/blockchain"
-	"github.com/Alonza0314/DFcoin/logger"
+	"github.com/Alonza0314/DFCoin/blockchain"
+	"github.com/Alonza0314/DFCoin/logger"
 	"github.com/spf13/cobra"
 )
 

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/Alonza0314/DFcoin/blockchain"
+	"github.com/Alonza0314/DFCoin/blockchain"
 	"github.com/spf13/cobra"
 )
 

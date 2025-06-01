@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Alonza0314/DFcoin/logger"
+	"github.com/Alonza0314/DFCoin/logger"
 )
 
 type Block struct {

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Alonza0314/DFcoin/blockchain"
+	"github.com/Alonza0314/DFCoin/blockchain"
 )
 
 const (

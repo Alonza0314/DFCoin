@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Alonza0314/DFcoin/cmd"
-	"github.com/Alonza0314/DFcoin/logger"
+	"github.com/Alonza0314/DFCoin/cmd"
+	"github.com/Alonza0314/DFCoin/logger"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/Alonza0314/DFcoin
+module github.com/Alonza0314/DFCoin
 
 go 1.23
 
