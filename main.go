@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "dfcoin/logger"
 
 func main() {
-	fmt.Println("This is  DFCoin.")
+	logger.Log = logger.NewLogger()
 }
