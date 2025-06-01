@@ -58,7 +58,7 @@
 ## 專案架構
 
 ```bash
-DFcoin/
+DFCoin/
 ├── blockchain/
 │   ├── block.go
 │   ├── blockchain.go
@@ -72,10 +72,12 @@ DFcoin/
 ├── network/
 │   ├── node.go
 │   ├── server.go
-├── cli/
-│   └── cli.go
-├── db/
-│   └── bolt.go
+├── cmd/
+│   └── root.go
+├── bboltdb/
+│   └── db.go
+├── logger/
+│   └── logger.go
 ├── main.go
 
 ```
