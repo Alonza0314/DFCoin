@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"github.com/Alonza0314/DFCoin/cmd"
+	"github.com/Alonza0314/DFCoin/logger"
+)
 
 func main() {
-	fmt.Println("This is  DFCoin.")
+	logger.Log = logger.NewLogger()
+	cmd.Execute()
 }

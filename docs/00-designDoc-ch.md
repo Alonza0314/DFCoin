@@ -1,82 +1,81 @@
 # DFCoin: 自設計加密貨幣
 
-## 系統架構
+## 設計階段
 
-| 模組 | 說明 |
-|------|------|
-| 區塊鏈核心 | 區塊結構、鏈串接、防篡改驗證、創世區塊 |
-| 加密貨幣模型（GoCoin） | 模仿 Bitcoin，實作 **UTXO** 架構、交易驗證、交易池 |
-| 共識演算法（Proof of Work） | PoW 挖礦難度調整、區塊合法性驗證 |
-| 錢包 | 基於 ECDSA 公私鑰產生地址、交易簽名驗證 |
-| 節點 | 可部署多個節點、彼此同步區塊、傳播交易和區塊 |
-| P2P 網路（簡易） | 節點間互通訊息、自動同步最新鏈與交易（可用 libp2p / TCP） |
-| API（REST + CLI） | 使用者發送交易、查詢區塊鏈、查看餘額 |
-| 區塊瀏覽器（可選） | Web 前端展示區塊、交易、挖礦狀態（支援用 React/Vue 開發） |
+### 第一階段：核心區塊鏈與 CLI 初步
 
-## 最終目標
+| 模組            | 功能                                                        |
+| ------------- | --------------------------------------------------------- |
+| Block         | 區塊結構（索引、時間戳、前一區塊雜湊、交易、Nonce）                              |
+| Blockchain    | 區塊鏈結構與儲存（記憶體 or BoltDB）                                   |
+| Proof-of-Work | 基於簡單難度的挖礦邏輯                                               |
+| CLI           | Cobra 製作 `createblockchain`, `addblock`, `printchain` 等命令 |
 
-- 區塊鏈核心
-  - 區塊內含：交易列表、前一區塊 hash、時間戳、難度、Nonce、Merkle root
-  - 自動難度調整機制
-  - 防止雙重支付
-- 加密貨幣機制
-  - 完整 UTXO 模型（Unspent Transaction Outputs）
-  - 支援轉帳、找零、多筆輸入輸出交易
-  - 支援交易池（交易在未被打包前暫存在 mempool）
-- 錢包與地址
-  - 使用 ECDSA 金鑰對（Go 的 crypto/ecdsa）
-  - Base58 編碼錢包地址（與 Bitcoin 相同格式）
-  - 用戶可產生私鑰 / 公鑰 / 地址
-  - 可簽署交易與驗證簽章
-- 共識與挖礦
-  - 基礎 Proof of Work 挖礦
-  - 動態調整難度（根據過去 N 個區塊平均時間）
-  - 礦工可打包交易並獲得區塊獎勵
-- 節點網路
-  - 多節點同步機制（TCP / HTTP 傳輸）
-  - 節點自動下載最新鏈
-  - 交易與區塊的 Gossip 傳播
-- RESTful API & CLI
-  - /createwallet
-  - /getbalance/:address
-  - /send（from, to, amount）
-  - /mine
-  - /chain 查詢目前完整區塊鏈
-- 測試與展示
-  - 建立三個節點互相同步資料
-  - 發送多筆交易並觀察如何被打包進區塊
-  - 整個系統可本地運作、無外部依賴
+### 第二階段：交易與 UTXO 模型
 
-## 關鍵技術
+| 模組          | 功能                                      |
+| ----------- | --------------------------------------- |
+| Transaction | 定義交易結構：輸入 (`TXInput`) / 輸出 (`TXOutput`) |
+| UTXO        | 可用輸出管理邏輯（查找、更新、索引）                      |
+| Coinbase TX | 區塊獎勵交易支援                                |
+| CLI         | `send`, `getbalance` 命令加入               |
 
-| 功能 | 對應工程技能 |
-| - | - |
-| UTXO 模型 | 真實比特幣帳本邏輯，非帳號餘額式 |
-| ECDSA 簽名與驗證 | 加密學應用，與真實錢包、交易驗證相同 |
-| Proof of Work | 共識機制與挖礦算法基礎 |
-| P2P 通訊 | 去中心化資料同步思維 |
-| RESTful + CLI 工具 | 系統介面完整，適合展示作品 |
-| 多節點資料一致性 | 區塊鏈網路關鍵能力（可擴展到 DHT, Raft, libp2p） |
+### 第三階段：錢包與金鑰管理
 
-## 分階段設計
+| 模組      | 功能                                  |
+| ------- | ----------------------------------- |
+| Wallet  | 金鑰對生成（使用 ECDSA 或 secp256k1）         |
+| Address | 錢包地址格式與 Base58Check 編碼              |
+| Wallets | 多錢包管理與保存                            |
+| CLI     | `createwallet`, `listaddresses` 等命令 |
 
-| 階段 | 功能與任務 | 難度 |
-| - | - | - |
-| 第 1 階段 | 區塊鏈資料結構 + 挖礦 + CLI | ⭐⭐ |
-| 第 2 階段 | UTXO 模型 + 多筆交易支援 + 錢包 | ⭐⭐⭐ |
-| 第 3 階段 | 整合 API / RESTful Server | ⭐⭐⭐  |
-| 第 4 階段 | 多節點資料同步 + P2P 簡易通訊 | ⭐⭐⭐⭐ |
-| 第 5 階段 | 加上動態難度 + 區塊獎勵 + 完整交易驗證流程 | ⭐⭐⭐⭐ |
-| 第 6 階段 | 打包成展示專案 + README + CLI Demo | ⭐⭐ |
+### 第四階段：P2P 網路與節點同步
 
-## 延伸設計
+| 模組               | 功能                                                  |
+| ---------------- | --------------------------------------------------- |
+| P2P              | 基於 TCP 實作節點之間的資料傳播                                  |
+| Message Protocol | 定義 `version`, `inv`, `getdata`, `block`, `tx` 等訊息協議 |
+| Node             | 節點同步區塊鏈、接收交易                                        |
+| CLI              | `startnode` 加入網路節點命令                                |
 
-- 支援 Merkle Tree、SPV 輕節點
-- 模擬智能合約執行邏輯（簡化 VM）
-- 區塊獎勵減半機制（模仿 Bitcoin Halving）
-- 整合 React 做一個簡易「GoScan」（區塊瀏覽器）
-- 實作簡易 DHT（去中心節點發現）
+### 第五階段：API 與前端擴展介面
 
-## 外部參考
+| 模組         | 功能                                        |
+| ---------- | ----------------------------------------- |
+| REST API   | 提供 `/balance`, `/send`, `/mine` 等 JSON 介面 |
+| Web Wallet | 簡易 Web UI for 錢包與交易操作                     |
+| Swagger    | 文件說明與商業導向 API 文檔                          |
 
-- [設計文件-ChatGPT](https://chatgpt.com)
+### 第六階段：測試網、部署與商業優化
+
+| 項目                  | 功能                        |
+| ------------------- | ------------------------- |
+| Testnet             | 測試鏈：獨立節點、測試幣              |
+| Docker / Kubernetes | 輕量部署架構支援                  |
+| Security            | 證書加密、金鑰保管策略（如 keystore）   |
+| 商業介接                | 支援支付系統、費用系統、Token Wrapper |
+
+## 專案架構
+
+```bash
+DFcoin/
+├── blockchain/
+│   ├── block.go
+│   ├── blockchain.go
+│   ├── pow.go
+├── transaction/
+│   ├── transaction.go
+│   ├── utxo.go
+├── wallet/
+│   ├── wallet.go
+│   ├── wallets.go
+├── network/
+│   ├── node.go
+│   ├── server.go
+├── cli/
+│   └── cli.go
+├── db/
+│   └── bolt.go
+├── main.go
+
+```
