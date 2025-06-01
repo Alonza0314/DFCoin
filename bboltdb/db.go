@@ -10,9 +10,13 @@ import (
 func DbSave(dbPath string, bucket, key, value []byte) error {
 	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		return err
+		panic(fmt.Sprintf("DbSave error: %v", err))
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			panic(fmt.Sprintf("DbSave error: %v", err))
+		}
+	}()
 
 	return db.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists(bucket)
@@ -26,9 +30,13 @@ func DbSave(dbPath string, bucket, key, value []byte) error {
 func DbLoad(dbPath string, bucket, key []byte) ([]byte, error) {
 	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		return nil, err
+		panic(fmt.Sprintf("DbLoad error: %v", err))
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			panic(fmt.Sprintf("DbLoad error: %v", err))
+		}
+	}()
 
 	var value []byte
 	if err := db.View(func(tx *bolt.Tx) error {
@@ -50,9 +58,13 @@ func DbLoad(dbPath string, bucket, key []byte) ([]byte, error) {
 func DbUpdate(dbPath string, bucket, key, value []byte) error {
 	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		return err
+		panic(fmt.Sprintf("DbUpdate error: %v", err))
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			panic(fmt.Sprintf("DbUpdate error: %v", err))
+		}
+	}()
 
 	return db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(bucket)
@@ -66,9 +78,13 @@ func DbUpdate(dbPath string, bucket, key, value []byte) error {
 func DbRemove(dbPath string, bucket, key []byte) error {
 	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		return err
+		panic(fmt.Sprintf("DbRemove error: %v", err))
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			panic(fmt.Sprintf("DbRemove error: %v", err))
+		}
+	}()
 
 	return db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(bucket)

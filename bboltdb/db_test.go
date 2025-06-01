@@ -95,8 +95,14 @@ var testDbCasesWithMap = []struct {
 }
 
 func TestDbOperation(t *testing.T) {
-	os.Mkdir(DB_DIR, 0755)
-	defer os.RemoveAll(DB_DIR)
+	if err := os.Mkdir(DB_DIR, 0755); err != nil {
+		t.Fatalf("Error creating directory: %v", err)
+	}
+	defer func() {
+		if err := os.RemoveAll(DB_DIR); err != nil {
+			t.Fatalf("Error removing directory: %v", err)
+		}
+	}()
 
 	for _, testCase := range testDbCases {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -130,8 +136,14 @@ func TestDbOperation(t *testing.T) {
 }
 
 func TestDbOperationWithMap(t *testing.T) {
-	os.Mkdir(DB_DIR, 0755)
-	defer os.RemoveAll(DB_DIR)
+	if err := os.Mkdir(DB_DIR, 0755); err != nil {
+		t.Fatalf("Error creating directory: %v", err)
+	}
+	defer func() {
+		if err := os.RemoveAll(DB_DIR); err != nil {
+			t.Fatalf("Error removing directory: %v", err)
+		}
+	}()
 
 	for _, testCase := range testDbCasesWithMap {
 		t.Run(testCase.name, func(t *testing.T) {
