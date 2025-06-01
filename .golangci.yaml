@@ -7,4 +7,4 @@ linters:
   # - `all`: enables all linters by default.
   # - `none`: disables all linters by default.
   # - `fast`: enables only linters considered as "fast" (`golangci-lint help linters --json | jq '[ .[] | select(.fast==true) ] | map(.name)'`).
-  default: all
+  default: standard
